@@ -1,0 +1,229 @@
+URL: https://www.youtube.com/watch?v=1NrHkjlWVhM&t=107s
+
+Blog features
+    - mark down headings
+        enter a hashtag before a heading 
+            and it gets encorperated into HTML
+    - the title of the article
+        on the Blog 
+            is shown in the URL
+
+
+
+
+Step one (setup our server)
+    type "npm init -y" in the terminal
+        press enter
+            this creates a package.json file
+Step 2
+    install dependencies
+        type "npm i express mongoose ejs" in the terminal
+            press enter
+                express is for our server
+                mongoose is for our database
+                ejs is for our different views
+                    these give you a 
+                        package-lock.json file
+                            and a node_modules folder
+Step 3
+    install our dev dependencies
+        type "npm i --save-dev nodemon"
+            nodemon refreshes our page everytime we make a change in our json files
+    add a script to json 
+        "devStart": "nodemon server.js"
+Step 4
+    create a server.js file 
+        type "npm run devStart" in the terminal
+            so everytime you write code into the server.js file
+                the terminal will update
+                    us this everytime you have restart the program
+                        otherwise the localhost won't work 
+Step 5
+    setup server    
+        need to get express from the library that was just installed
+            then we are going to get our app variable
+            which we make a varible that calls express function  
+                then add a .listen() to that variable 
+                and assign it a port
+                this is how we start our app 
+                    got to browser and type in localhost:5000
+                    we can see our application loading up
+                    which says "Cannot Get /"
+                        which is saying that we don't have a route set up at our index
+                        lets create that route with the variable from before that has the library as a function
+                            add a .get to it and pass it our index route
+                                which will take a request and a response
+                                    and send a simple response back to the user
+                                    just to make sure its all working 
+Step 6
+    now we have to make it spit out HTML to the screen
+        bc printing out text is not vary useful
+            first we need to set our view engine
+            with an .set
+                with 'view engine' as parameter no 1
+                    and the 2nd set to 'ejs'
+                        thats bc we are going to be writing all of our views using ejs
+                        and our view engine is going to convert that to HTML
+Step 7
+    create a new folder called views
+        create an index.ejs
+            "!" + enter
+                basket setup
+                    title it and write something in the body
+    back in our server.js file  
+        instead of .send()
+            we want .render(file path)
+                and pass it the file path to index
+                    refresh the page to make sure that the
+                        something written in the index.js file 
+                            is showing
+Step 8
+    The basic setup is complete
+        now we need to create all the different routes 
+            or buttons that lead to another part of the page
+                - new article
+                - read more
+                - edit
+                - delete
+    instead of putting it into the server.js file
+        we are going to create a new folder called routes 
+            create a file called articles.js
+                and in here we are going create all the routes 
+                    directly related to the article
+    In order to use all the routes
+        we need to set up express 
+            then we want to get our router 
+            which is just equal to express.Router()
+                calling it as a function
+            its a router that we will use to create views 
+            like .get rendering from server.js 
+                main thing about this router 
+                    is that we have to tell this application
+                        to actually us this router
+                            and we do that by exporting it from 
+                                articles.js 
+                                    with modules.exports = router 
+                                    which means that
+                                        when ever we require this file (articles.js) 
+                                        we can just read in our router 
+        Back to our server.js file 
+            and add articleRouter = require('./routes/articles')
+                ./ is the relative path 
+                    from our routes folder 
+                        and get articles.js out of there
+            now our server has access to our router 
+                now we need to tell our app to use that router 
+                    with app.use(articleRouter)
+                        but we also have to tell our article router
+                            where its going to be based on 
+                                we want the URL to say "/articles"
+        So lets put our router there 
+            /articles, articleRouter  
+                which means that every single route we take with articleRouter
+                    will be added to the end of /article 
+Step 9 
+    Name index route figured out
+        we want to pass all of our artles to the index 
+            just pass an object to our render
+
+    In index.js
+        instead of rendering article 
+            we are going to render somthing called text
+        we are going to pass a 
+            a javascript symbol from node.js 
+                <%= text %> bracket syntax
+                    this allows us to output a variable 
+    Now in our server.js 
+        app.get render to the index 
+            a key value of text: 'Hello'
+                we are passing it from our server 
+                    to this .ejs file 
+    So instead of passing simple text 
+        lets pass our articles 
+    Being that we don't have any articles at the moment
+        we are just going to make a const article variable in app.get  
+            thats an array with an object inside
+Step 10
+    Examining the blog, 
+        what is really on the page?
+            Overview
+                - title (static)
+                - "New Article" (functional)
+            Each Blog Box 
+                - Title 
+                - Date
+                    * Created
+                    * Last modified
+                - Short description
+                - Buttons/ Links 
+                    * "Read More"
+                    * "Edit"
+                    * "Delete 
+    Now back to the array with the object inside of it 
+        the app.get request respond
+            titele
+                Date.now 
+                    description
+    Now lets pass these articles to our view 
+        by doing articles: articles 
+            then call it with the keyword "articles"
+                in btw the JavaScript/node.js symbols 
+                    now we can iterate over these articles 
+                        and do whatever we want with them
+Step 11
+    Lets design/structure the index page 
+        lets import boot strap
+            go to getbootstrap.com to get the 
+                URL CDN and paste it in the head of the index.js 
+Step 12
+    Making the cards to display on the index page 
+        one for every article in the blog 
+    To go through each one of our articles 
+        we put another less then (<) percent sign (%) 
+            but if we don't put an equal sign (=)
+                we can still run JavaScript code 
+                    it just won't be outputted to the page 
+    call the articles variable 
+        with the .forEach method 
+            where we run a function that returns our article 
+                for each iteration of our article 
+                    we are going to output 
+                        some type of HTML 
+                            btw the parameter function's braces
+    create a div with a class="card"
+        and a margin on top
+            inside the div 
+                we need to put the title of the article 
+                    so we call the variable articles 
+                    from the app.get 
+                    and attach the title name to articles 
+                    inside <%=> 
+    the article from the app.get is now showing 
+        bc the forEach is looping over it 
+            you can add another {curly brace}
+                article to the const articles variable 
+    Lets put more then just the title 
+        to do so lets build out the HTML section by section
+
+Step 13 (adding functionality to the new article button)
+    Setup the routing to the new file 
+
+Step 14 (setting up the display/form of a new article)
+     Heading 
+     Form 
+     New/Edit view needs to be equal 
+        bc the are the same      
+
+Step 15 (save article to database)
+    When setting up the DB 
+        it keeps crashing giving me a
+            MongooseServerSelectionError: connect ECONNREFUSED             
+
+Step 16 (models>article.js)
+    create a model where we store our articles
+        create a folder called models
+            create a file called articles.js 
+                import mongoose and then we need to create a schema 
+                    export it 
+(articles.js)
+    we import the schema
